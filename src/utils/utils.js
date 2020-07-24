@@ -57,3 +57,16 @@ export const getRouteAuthority = (path, routeData) => {
   });
   return authorities;
 };
+
+export function getUserInfo() {
+  const userInfoStr = localStorage.getItem('user_info')
+  try {
+    return JSON.parse(userInfoStr)
+  } catch(e) {
+    return null
+  }
+}
+
+export function isLogin() {
+  return getUserInfo()
+}
