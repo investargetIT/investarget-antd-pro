@@ -28,7 +28,7 @@ const Login = props => {
     const { dispatch } = props;
     dispatch({
       type: 'userAndlogin/login',
-      payload: { ...values, type },
+      payload: { ...values },
     });
   };
 
@@ -41,7 +41,7 @@ const Login = props => {
           )}
 
           <UserName
-            name="userName"
+            name="account"
             placeholder="用户名: admin or user"
             rules={[
               {

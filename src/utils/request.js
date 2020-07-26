@@ -56,5 +56,9 @@ const request = extend({
   errorHandler,
   // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
+  headers: {
+    'source': 1,
+    'clienttype': 3,
+  },
 });
 export default request;

@@ -16,8 +16,12 @@ const Model = {
         payload: response,
       }); // Login successfully
 
-      if (response.status === 'ok') {
+      if (response.code === 1000) {
         message.success('登录成功！');
+        const { token, user_info, menulist, permissions, is_superuser } = response.result; 
+        const userInfo = { ...user_info, token, menulist, permissions, is_superuser };
+        localStorage.setItem('user_info', JSON.stringify(userInfo));
+
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
@@ -38,6 +42,11 @@ const Model = {
         }
 
         history.replace(redirect || '/');
+      } else {
+        yield put({
+          type: 'changeLoginStatus',
+          payload: { status: 'error', type: 'account' },
+        }); 
       }
     },
 
