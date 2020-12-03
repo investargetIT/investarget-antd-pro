@@ -2,6 +2,7 @@ import { history } from 'umi';
 import { message } from 'antd';
 import { fakeAccountLogin, getFakeCaptcha } from './service';
 import { getPageQuery, setAuthority } from './utils/utils';
+import * as api from '@/api';
 
 const Model = {
   namespace: 'userAndlogin',
@@ -10,15 +11,15 @@ const Model = {
   },
   effects: {
     *login({ payload }, { call, put }) {
-      const response = yield call(fakeAccountLogin, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      }); // Login successfully
+      try {
+        const response = yield call(api.login, payload);
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response,
+        }); // Login successfully
 
-      if (response.code === 1000) {
         message.success('登录成功！');
-        const { token, user_info, menulist, permissions, is_superuser } = response.result; 
+        const { token, user_info, menulist, permissions, is_superuser } = response.data;
         const userInfo = { ...user_info, token, menulist, permissions, is_superuser };
         localStorage.setItem('user_info', JSON.stringify(userInfo));
 
@@ -42,11 +43,11 @@ const Model = {
         }
 
         history.replace(redirect || '/');
-      } else {
+      } catch (error) {
         yield put({
           type: 'changeLoginStatus',
           payload: { status: 'error', type: 'account' },
-        }); 
+        });
       }
     },
 

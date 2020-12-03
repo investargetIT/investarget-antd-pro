@@ -41,7 +41,7 @@ const Login = props => {
           )}
 
           <UserName
-            name="account"
+            name="username"
             placeholder="用户名: admin or user"
             rules={[
               {
