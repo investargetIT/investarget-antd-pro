@@ -39,6 +39,19 @@ export default defineConfig({
       component: '../layouts/BlankLayout',
       routes: [
         {
+          path: '/app',
+          component: '../layouts/BasicLayout',
+          Routes: ['src/pages/Authorized'],
+          routes: [
+            {
+              name: 'project',
+              icon: 'smile',
+              path: '/app/project',
+              component: 'ProjectList',
+            },
+          ],
+        },
+        {
           path: '/user',
           component: '../layouts/UserLayout',
           routes: [

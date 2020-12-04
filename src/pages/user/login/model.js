@@ -42,7 +42,7 @@ const Model = {
           }
         }
 
-        history.replace(redirect || '/');
+        history.replace(redirect || '/app/project');
       } catch (error) {
         yield put({
           type: 'changeLoginStatus',
