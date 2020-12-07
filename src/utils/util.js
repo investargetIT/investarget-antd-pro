@@ -1,5 +1,8 @@
 import { Popconfirm, Button, Modal } from 'antd'
+import i18next from 'i18next';
 import * as api from '../api'
+import zhMessages from '@/i18next/zh.json';
+import enMessages from '@/i18next/en.json';
 window.api = api
 
 import { baseUrl } from './request'
@@ -112,49 +115,45 @@ window.echo = function () {
 }
 
 // 使用 i18next 库来做国际化
-// let lang = window.appLocale.lang || 'cn'
-// i18next.init({
-//   lng: lang,
-//   debug: true,
-//   resources: {
-//     en: {
-//       translation: window.appLocale.messagesEn
-//     },
-//     cn: {
-//       translation: window.appLocale.messages
-//     }
-//   }
-// })
+let lang = window.appLocale ? window.appLocale.lang : 'cn'
+i18next.init({
+  lng: lang,
+  debug: true,
+  resources: {
+    en: {
+      translation: enMessages 
+    },
+    cn: {
+      translation: zhMessages 
+    }
+  }
+})
 
 window.LANG = localStorage.getItem('APP_PREFERRED_LANG') || 'cn';
-// changeLang(window.LANG);
+changeLang(window.LANG);
 
-// export function changeLang(lang='en') {
-//   return new Promise((resolve, reject) => {
-//     i18next.changeLanguage(lang, (err, t) => {
-//       if (err) reject(err);
-//       else {
-//         window.LANG = lang;
-//         localStorage.setItem('APP_PREFERRED_LANG', lang);
-//         resolve(t);
-//       }
-//     });
-//   });
-// }
+export function changeLang(lang='en') {
+  return new Promise((resolve, reject) => {
+    i18next.changeLanguage(lang, (err, t) => {
+      if (err) reject(err);
+      else {
+        window.LANG = lang;
+        localStorage.setItem('APP_PREFERRED_LANG', lang);
+        resolve(t);
+      }
+    });
+  });
+}
 
-// function i18n(key, options=null) {
-//   let ans;
-//   if (options) {
-//     ans = i18next.t(key, options)
-//   } else {
-//     ans = i18next.t(key)
-//   }
-//   if (ans === key) return ans.substr(ans.lastIndexOf(".") + 1).split("_").map(w => w ? w[0].toLocaleUpperCase() + w.substr(1) : w).join(" ");
-//   else return ans;
-// }
-
-function i18n(key) {
-  return key;
+function i18n(key, options=null) {
+  let ans;
+  if (options) {
+    ans = i18next.t(key, options)
+  } else {
+    ans = i18next.t(key)
+  }
+  if (ans === key) return ans.substr(ans.lastIndexOf(".") + 1).split("_").map(w => w ? w[0].toLocaleUpperCase() + w.substr(1) : w).join(" ");
+  else return ans;
 }
 
 function time(dateFromServer) {
