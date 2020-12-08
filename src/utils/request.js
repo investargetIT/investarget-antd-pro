@@ -1,10 +1,14 @@
 require('es6-promise').polyfill();
 import fetch from 'dva/fetch';
 
-const prodUrl = 'https://api.investarget.com';
+let prodUrl = 'https://api.investarget.com';
 let devUrl = "http://apitest.investarget.com";
 // devUrl = 'http://192.168.1.201:8000';
 // devUrl = prodUrl;
+
+// currently no production
+prodUrl = devUrl;
+
 const baseUrl = process.env.NODE_ENV === 'development' ? devUrl : prodUrl;
 const mobileUploadUrl = process.env.NODE_ENV === 'development' ? 'http://mtest.investarget.com' : 'https://m.investarget.com'; 
 export { baseUrl, mobileUploadUrl, prodUrl }
