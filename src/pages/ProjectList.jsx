@@ -11,29 +11,12 @@ import {
 import { Input, Icon, Table, Button, Pagination, Popconfirm, Modal } from 'antd'
 // import LeftRightLayout from '../components/LeftRightLayout'
 
-// import { ProjectListFilter } from '../components/Filter'
+import { ProjectListFilter } from '../components/Filter'
 // import { Search } from '../components/Search';
 
 // import AuditProjectModal from '../components/AuditProjectModal'
 import { PAGE_SIZE_OPTIONS } from '../constants';
 import { ApiError } from '../utils/request';
-
-const ProjectListFilter = { defaultValue: {
-  tags: [],
-  country: [],
-  industries: [],
-  netIncome_USD_F: 0,
-  netIncome_USD_T: 500000000,
-  grossProfit_F: -200000000,
-  grossProfit_T: 200000000,
-  projstatus: [],
-  service: [],
-  // indGroup: [],
-  // takeUser: [],
-  // makeUser: [],
-  usertype: null,
-  user: [],
-} };
 
 class ProjectList extends React.Component {
   constructor(props) {
@@ -353,7 +336,7 @@ class ProjectList extends React.Component {
     return (
       // <LeftRightLayout location={location} title={i18n('project.platform_projects')} action={action}>
 <div>
-        {/* <ProjectListFilter defaultValue={filters} onSearch={this.handleFilt} onReset={this.handleReset} /> */}
+        <ProjectListFilter defaultValue={filters} onSearch={this.handleFilt} onReset={this.handleReset} />
 
         {/* <div style={{ marginBottom: 20, textAlign: 'right' }} className="clearfix">
           <Search
@@ -412,9 +395,9 @@ class ProjectList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  // const { country } = state.app
-  // const { page: userPageSize } = state.currentUser;
-  return { country: [], userPageSize: 10 };
+  const { country } = state.app;
+  const { page: userPageSize } = state.currentUser;
+  return { country, userPageSize };
 }
 
 

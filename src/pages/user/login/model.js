@@ -23,6 +23,11 @@ const Model = {
         const userInfo = { ...user_info, token, menulist, permissions, is_superuser };
         localStorage.setItem('user_info', JSON.stringify(userInfo));
 
+        yield put({
+          type: 'currentUser/save',
+          userInfo
+        })
+
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params;
