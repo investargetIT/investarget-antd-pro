@@ -7,8 +7,20 @@ import {
   formatMoney, 
   isShowCNY, 
 } from '../utils/util';
-
-import { Input, Icon, Table, Button, Pagination, Popconfirm, Modal, Progress } from 'antd'
+import { DownOutlined } from '@ant-design/icons';
+import {
+  Input,
+  Icon,
+  Table,
+  Button,
+  Pagination,
+  Popconfirm,
+  Modal,
+  Progress,
+  Divider,
+  Dropdown,
+  Menu,
+} from 'antd';
 // import LeftRightLayout from '../components/LeftRightLayout'
 
 import { ProjectListFilter } from '../components/Filter'
@@ -191,10 +203,20 @@ class ProjectList extends React.Component {
   //   }
   // }
 
+  handleDeleteBtnClick = projectID => {
+    Modal.confirm({
+      title: '删除项目',
+      content: '确定删除该项目吗？',
+      okText: '确认',
+      cancelText: '取消',
+      onOk: () => this.handleDelete(projectID),
+    });
+  }
+
   render() {
     const { location } = this.props
     const { total, list, loading, page, pageSize, filters, search, visible, currentStatus, status, sendEmail, confirmLoading, sendWechat, discloseFinance } = this.state
-    const buttonStyle={textDecoration:'underline',border:'none',background:'none',width:'110px',textAlign:'left'}
+    const buttonStyle={textDecoration:'underline',border:'none',background:'none',textAlign:'left',padding: 0,width: '100%'}
     const imgStyle={width:'15px',height:'20px'}
     const columns = [
       {
@@ -297,59 +319,66 @@ class ProjectList extends React.Component {
       })
     }
     columns.push({
-        title: i18n('common.operation'),
-        key: 'action',
-        render: (text, record) => {
-          return (
-            <span  style={{display:'flex',alignItems:'center'}}>
-            <div style={{display:'flex',flexWrap:"wrap",maxWidth:'250px'}}>
-              <Button style={buttonStyle} disabled={!hasPerm('proj.admin_changeproj')} onClick={this.openAuditProjectModal.bind(this, record.id, record.projstatus.id)}>{i18n('project.modify_status')}</Button>
-
-              <Link href={"/app/projects/recommend/" + record.id} target="_blank">
-                <Button style={buttonStyle} disabled={!(record.projstatus.id >= 4 && record.projstatus.id < 8) || !(hasPerm('proj.admin_addfavorite') || hasPerm('usersys.as_trader'))}>{i18n('project.recommend')}</Button>
-              </Link>
-
-              {/* <Link to={"/app/timeline/add?projId=" + record.id}>
-                <Button style={buttonStyle}  disabled={!(record.projstatus.id >= 4 && record.projstatus.id < 8) || !(hasPerm('timeline.admin_addline') || hasPerm('timeline.user_addline'))}>{i18n('project.create_timeline')}</Button>
-              </Link> */}
-
-              { record.action.canAddOrgBD ? 
-              <Link to={"/app/orgbd/add?projId=" + record.id}>
-                <Button style={buttonStyle}  disabled={!(record.projstatus.id >= 4 && record.projstatus.id < 8)}>{i18n('project.create_org_bd')}</Button>
-              </Link>
-              : null }
-
-              { record.action.canAddMeetBD ? 
-              <Link to={"/app/meetingbd/add?projId=" + record.id}>
-                <Button style={buttonStyle}  disabled={!(record.projstatus.id >= 4 && record.projstatus.id < 8)}>{i18n('project.create_meeting_bd')}</Button>
-              </Link>
-              : null }
-
-              <Link to={'/app/dataroom/add?projectID=' + record.id}>
-                <Button style={buttonStyle} disabled={!record.action.canAddDataroom}>{i18n('project.create_dataroom')}</Button>
-              </Link>
-
-              { record.projstatus.id >= 4 && record.projstatus.id < 8 && (hasPerm('BD.manageOrgBD') || hasPerm('BD.user_getOrgBD')) ?
-              <Link to={'/app/org/bd?projId=' + record.id}>
-                <Button style={buttonStyle}>查看机构BD</Button>
-              </Link>
-              : null }
-
-              <Link to={'/app/projects/edit/' + record.id}>
-                <Button style={buttonStyle} disabled={!record.action.change}  >{i18n("common.edit")}</Button>
-              </Link>
-            </div>
-            <div>
-              <Popconfirm title={i18n('message.confirm_delete')} onConfirm={this.handleDelete.bind(null, record.id)}>
-                <Button size="small" style={buttonStyle} disabled={!record.action.delete}>
-                  <Icon type="delete" />
-                </Button>
-              </Popconfirm>
-            </div>
-            </span>
-          )
-        }
-    })
+      title: i18n('common.operation'),
+      key: 'action',
+      render: (_, record) => {
+        return (
+          <>
+            <Link to={'/app/projects/edit/' + record.id}>
+              <Button style={{ ...buttonStyle, padding: 0, width: 'auto', color: '#1890ff' }} disabled={!record.action.change}>{i18n("common.edit")}</Button>
+            </Link>
+            <Divider type="vertical" />
+            <Dropdown
+              overlay={
+                <Menu>
+                  <Menu.Item key="modify_status">
+                    <Button style={buttonStyle} disabled={!hasPerm('proj.admin_changeproj')} onClick={this.openAuditProjectModal.bind(this, record.id, record.projstatus.id)}>{i18n('project.modify_status')}</Button>
+                  </Menu.Item>
+                  <Menu.Item key="recommend">
+                    <a href={"/app/projects/recommend/" + record.id} target="_blank">
+                      <Button style={buttonStyle} disabled={!(record.projstatus.id >= 4 && record.projstatus.id < 8) || !(hasPerm('proj.admin_addfavorite') || hasPerm('usersys.as_trader'))}>{i18n('project.recommend')}</Button>
+                    </a>
+                  </Menu.Item>
+                  {record.action.canAddOrgBD &&
+                    <Menu.Item key="create_org_bd">
+                      <Link to={"/app/orgbd/add?projId=" + record.id}>
+                        <Button style={buttonStyle} disabled={!(record.projstatus.id >= 4 && record.projstatus.id < 8)}>{i18n('project.create_org_bd')}</Button>
+                      </Link>
+                    </Menu.Item>
+                  }
+                  {record.action.canAddMeetBD &&
+                    <Menu.Item key="create_meeting_bd">
+                      <Link to={"/app/meetingbd/add?projId=" + record.id}>
+                        <Button style={buttonStyle} disabled={!(record.projstatus.id >= 4 && record.projstatus.id < 8)}>{i18n('project.create_meeting_bd')}</Button>
+                      </Link>
+                    </Menu.Item>
+                  }
+                  <Menu.Item key="create_dataroom">
+                    <Link to={'/app/dataroom/add?projectID=' + record.id}>
+                      <Button style={buttonStyle} disabled={!record.action.canAddDataroom}>{i18n('project.create_dataroom')}</Button>
+                    </Link>
+                  </Menu.Item>
+                  {(record.projstatus.id >= 4 && record.projstatus.id < 8 && (hasPerm('BD.manageOrgBD') || hasPerm('BD.user_getOrgBD'))) &&
+                    <Menu.Item key="view_org_bd">
+                      <Link to={'/app/org/bd?projId=' + record.id}>
+                        <Button style={buttonStyle}>查看机构BD</Button>
+                      </Link>
+                    </Menu.Item>
+                  }
+                  <Menu.Item key="delete" danger>
+                    <Button size="small" style={buttonStyle} disabled={!record.action.delete} onClick={() => this.handleDeleteBtnClick(record.id)}>删除</Button>
+                  </Menu.Item>
+                </Menu>
+              }
+            >
+              <a>
+                更多 <DownOutlined />
+              </a>
+            </Dropdown>
+          </>
+        );
+      }
+    });
     const action = (hasPerm('proj.admin_addproj') || hasPerm('proj.user_addproj')) ?
                     { name: i18n('project.upload_project'), link: "/app/projects/add" } : null
 
