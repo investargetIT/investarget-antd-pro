@@ -21,6 +21,7 @@ import {
   Dropdown,
   Menu,
   Card,
+  Radio,
 } from 'antd';
 // import LeftRightLayout from '../components/LeftRightLayout'
 
@@ -30,6 +31,9 @@ import { ProjectListFilter } from '../components/Filter'
 // import AuditProjectModal from '../components/AuditProjectModal'
 import { PAGE_SIZE_OPTIONS } from '../constants';
 import { ApiError } from '../utils/request';
+
+const RadioButton = Radio.Button;
+const RadioGroup = Radio.Group
 
 class ProjectList extends React.Component {
   constructor(props) {
@@ -381,11 +385,18 @@ class ProjectList extends React.Component {
         );
       }
     });
-    const action = (hasPerm('proj.admin_addproj') || hasPerm('proj.user_addproj')) ?
-                    { name: i18n('project.upload_project'), link: "/app/projects/add" } : null
+    const extraContent = (
+      <div>
+        <RadioGroup defaultValue="all">
+          <RadioButton value="all">全部</RadioButton>
+          <RadioButton value="progress">进行中</RadioButton>
+          <RadioButton value="waiting">等待中</RadioButton>
+        </RadioGroup>
+        {/* <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={() => ({})} /> */}
+      </div>
+    );
 
     return (
-      // <LeftRightLayout location={location} title={i18n('project.platform_projects')} action={action}>
 <div>
         {/* <ProjectListFilter defaultValue={filters} onSearch={this.handleFilt} onReset={this.handleReset} /> */}
 
@@ -399,7 +410,7 @@ class ProjectList extends React.Component {
           />
         </div> */}
 
-        <Card>
+        <Card title={i18n('project.platform_projects')} bordered={false} extra={extraContent}>
           {(hasPerm('proj.admin_addproj') || hasPerm('proj.user_addproj')) &&
             <Link to="/app/projects/add">
               <Button
@@ -456,7 +467,6 @@ class ProjectList extends React.Component {
           onDiscloseFinanceChange={this.handleDiscloseFinanceChange}
         /> */}
 
-      {/* // </LeftRightLayout> */}
       </div>
     )
   }
