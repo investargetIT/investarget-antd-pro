@@ -213,7 +213,7 @@ class ProjectList extends React.Component {
         render: (text, record) => {
           if (record.action.get) {
             return (
-              <span className="span-title">
+              <span style={{  display: 'inline-block', maxWidth: 200 }}>
                 <Link to={'/app/projects/' + record.id}>{record.projtitle}</Link>
               </span>
             )
@@ -228,6 +228,7 @@ class ProjectList extends React.Component {
       {
         title: i18n('project.country'),
         key: 'country',
+        align: 'center',
         render: (text, record) => {
           const country = record.country
           const countryName = country ? country.country : ''
@@ -239,10 +240,10 @@ class ProjectList extends React.Component {
             }
           }
           return (
-            <span style={{display: 'flex', alignItems: 'center', whiteSpace: 'nowrap'}}>
-              { imgUrl ? <img src={imgUrl} style={{width: '20px', height: '14px', marginRight: '4px'}} /> : null }
-              <span>{countryName}</span>
-            </span>
+            <div style={{ minWidth: 60 }}>
+              { imgUrl ? <div><img src={imgUrl} style={{ width: '20px', height: '14px' }} /></div> : null }
+              <div>{countryName}</div>
+            </div>
           )
         }
       },
@@ -336,7 +337,7 @@ class ProjectList extends React.Component {
     return (
       // <LeftRightLayout location={location} title={i18n('project.platform_projects')} action={action}>
 <div>
-        <ProjectListFilter defaultValue={filters} onSearch={this.handleFilt} onReset={this.handleReset} />
+        {/* <ProjectListFilter defaultValue={filters} onSearch={this.handleFilt} onReset={this.handleReset} /> */}
 
         {/* <div style={{ marginBottom: 20, textAlign: 'right' }} className="clearfix">
           <Search
