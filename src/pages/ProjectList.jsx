@@ -8,7 +8,7 @@ import {
   isShowCNY, 
 } from '../utils/util';
 
-import { Input, Icon, Table, Button, Pagination, Popconfirm, Modal } from 'antd'
+import { Input, Icon, Table, Button, Pagination, Popconfirm, Modal, Progress } from 'antd'
 // import LeftRightLayout from '../components/LeftRightLayout'
 
 import { ProjectListFilter } from '../components/Filter'
@@ -179,6 +179,7 @@ class ProjectList extends React.Component {
   }
 
   componentDidMount() {
+    this.props.dispatch({ type: 'app/getSourceList', payload: ['projstatus'] });
     this.getProject()
   }
 
@@ -266,7 +267,25 @@ class ProjectList extends React.Component {
           const statusName = status ? status.name : ''
           return statusName
         }
-      }
+      },
+      {
+        title: '项目进度',
+        key: 'progress',
+        render: (text, record) => {
+          const status = record.projstatus;
+          const statusID = status ? status.id : 0;
+          return (
+            <Progress
+              percent={Math.round(statusID / 8 * 100)}
+              // status={status}
+              strokeWidth={6}
+              style={{
+                width: 180,
+              }}
+            />
+          );
+        }
+      },
     ]
     if (hasPerm('usersys.as_admin')) {
       columns.push({
@@ -396,7 +415,7 @@ class ProjectList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { country } = state.app;
+  const { country, projstatus } = state.app;
   const { page: userPageSize } = state.currentUser;
   return { country, userPageSize };
 }
