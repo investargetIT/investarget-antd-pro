@@ -20,6 +20,7 @@ import {
   Divider,
   Dropdown,
   Menu,
+  Card,
 } from 'antd';
 // import LeftRightLayout from '../components/LeftRightLayout'
 
@@ -287,7 +288,7 @@ class ProjectList extends React.Component {
         render: (text, record) => {
           const status = record.projstatus
           const statusName = status ? status.name : ''
-          return statusName
+          return <div style={{ minWidth: 60 }}>{statusName}</div>
         }
       },
       {
@@ -313,6 +314,7 @@ class ProjectList extends React.Component {
       columns.push({
         title: i18n('project.is_hidden'),
         key: 'isHidden',
+        width: 92,
         render: (text, record) => {
           return record.isHidden ? i18n('project.invisible') : i18n('project.visible')
         }
@@ -323,7 +325,7 @@ class ProjectList extends React.Component {
       key: 'action',
       render: (_, record) => {
         return (
-          <>
+          <div style={{ minWidth: 95 }}>
             <Link to={'/app/projects/edit/' + record.id}>
               <Button style={{ ...buttonStyle, padding: 0, width: 'auto', color: '#1890ff' }} disabled={!record.action.change}>{i18n("common.edit")}</Button>
             </Link>
@@ -375,7 +377,7 @@ class ProjectList extends React.Component {
                 更多 <DownOutlined />
               </a>
             </Dropdown>
-          </>
+          </div>
         );
       }
     });
@@ -397,43 +399,45 @@ class ProjectList extends React.Component {
           />
         </div> */}
 
-        {(hasPerm('proj.admin_addproj') || hasPerm('proj.user_addproj')) &&
-          <Link to="/app/projects/add">
-            <Button
-              type="dashed"
-              style={{
-                width: '100%',
-                marginBottom: 8,
-              }}
-            >
-              <PlusOutlined />
+        <Card>
+          {(hasPerm('proj.admin_addproj') || hasPerm('proj.user_addproj')) &&
+            <Link to="/app/projects/add">
+              <Button
+                type="dashed"
+                style={{
+                  width: '100%',
+                  marginBottom: 8,
+                }}
+              >
+                <PlusOutlined />
               新增项目
             </Button>
-          </Link>
-        }
+            </Link>
+          }
 
-        <Table
-          columns={columns}
-          dataSource={list}
-          rowKey={record=>record.id}
-          loading={loading}
-          pagination={false}
-        />
-
-        <div style={{ margin: '16px 0' }} className="clearfix">
-          <Pagination
-            size="large"
-            style={{ float: 'right' }}
-            total={total}
-            current={page}
-            pageSize={pageSize}
-            onChange={this.handlePageChange}
-            showSizeChanger
-            onShowSizeChange={this.handlePageSizeChange}
-            showQuickJumper
-            pageSizeOptions={PAGE_SIZE_OPTIONS}
+          <Table
+            columns={columns}
+            dataSource={list}
+            rowKey={record => record.id}
+            loading={loading}
+            pagination={false}
           />
-        </div>
+
+          <div style={{ margin: '16px 0' }} className="clearfix">
+            <Pagination
+              size="large"
+              style={{ float: 'right' }}
+              total={total}
+              current={page}
+              pageSize={pageSize}
+              onChange={this.handlePageChange}
+              showSizeChanger
+              onShowSizeChange={this.handlePageSizeChange}
+              showQuickJumper
+              pageSizeOptions={PAGE_SIZE_OPTIONS}
+            />
+          </div>
+        </Card>
 
         {/* <AuditProjectModal
           projId={this.state.id}
