@@ -7,7 +7,7 @@ import {
   formatMoney, 
   isShowCNY, 
 } from '../utils/util';
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   Input,
   Icon,
@@ -396,6 +396,21 @@ class ProjectList extends React.Component {
             value={search}
           />
         </div> */}
+
+        {(hasPerm('proj.admin_addproj') || hasPerm('proj.user_addproj')) &&
+          <Link to="/app/projects/add">
+            <Button
+              type="dashed"
+              style={{
+                width: '100%',
+                marginBottom: 8,
+              }}
+            >
+              <PlusOutlined />
+              新增项目
+            </Button>
+          </Link>
+        }
 
         <Table
           columns={columns}
