@@ -26,7 +26,7 @@ import {
 // import LeftRightLayout from '../components/LeftRightLayout'
 
 import { ProjectListFilter } from '../components/Filter'
-// import { Search } from '../components/Search';
+import { Search } from '../components/Search';
 
 // import AuditProjectModal from '../components/AuditProjectModal'
 import { PAGE_SIZE_OPTIONS } from '../constants';
@@ -391,23 +391,19 @@ class ProjectList extends React.Component {
           <RadioButton value="all">全部</RadioButton>
           {this.props.projectStatus.map(m => <RadioButton key={m.id} value={m.id}>{m.name}</RadioButton>)}
         </RadioGroup>
-        {/* <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={() => ({})} /> */}
+        <Search
+          style={{ width: 200, marginLeft: 16 }}
+          placeholder={i18n('project.project_name')}
+          onSearch={this.handleSearch}
+          onChange={search => this.setState({ search })}
+          value={search}
+        />
       </div>
     );
 
     return (
-<div>
+      <div>
         {/* <ProjectListFilter defaultValue={filters} onSearch={this.handleFilt} onReset={this.handleReset} /> */}
-
-        {/* <div style={{ marginBottom: 20, textAlign: 'right' }} className="clearfix">
-          <Search
-            style={{ width: 200 }}
-            placeholder={i18n('project.project_name')}
-            onSearch={this.handleSearch}
-            onChange={search => this.setState({ search })}
-            value={search}
-          />
-        </div> */}
 
         <Card title={i18n('project.platform_projects')} bordered={false} extra={extraContent}>
           {(hasPerm('proj.admin_addproj') || hasPerm('proj.user_addproj')) &&
@@ -420,7 +416,7 @@ class ProjectList extends React.Component {
                 }}
               >
                 <PlusOutlined />
-              新增项目
+              发布项目
             </Button>
             </Link>
           }
@@ -467,7 +463,7 @@ class ProjectList extends React.Component {
         /> */}
 
       </div>
-    )
+    );
   }
 }
 
