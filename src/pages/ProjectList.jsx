@@ -389,8 +389,7 @@ class ProjectList extends React.Component {
       <div>
         <RadioGroup defaultValue="all">
           <RadioButton value="all">全部</RadioButton>
-          <RadioButton value="progress">进行中</RadioButton>
-          <RadioButton value="waiting">等待中</RadioButton>
+          {this.props.projectStatus.map(m => <RadioButton key={m.id} value={m.id}>{m.name}</RadioButton>)}
         </RadioGroup>
         {/* <Search className={styles.extraContentSearch} placeholder="请输入" onSearch={() => ({})} /> */}
       </div>
@@ -475,7 +474,7 @@ class ProjectList extends React.Component {
 function mapStateToProps(state) {
   const { country, projstatus } = state.app;
   const { page: userPageSize } = state.currentUser;
-  return { country, userPageSize };
+  return { country, userPageSize, projectStatus: projstatus };
 }
 
 
