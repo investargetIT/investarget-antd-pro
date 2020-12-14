@@ -403,7 +403,9 @@ class ProjectList extends React.Component {
 
     return (
       <div>
-        {/* <ProjectListFilter defaultValue={filters} onSearch={this.handleFilt} onReset={this.handleReset} /> */}
+        <Card bordered={false} style={{ marginBottom: 16 }}>
+          <ProjectListFilter defaultValue={filters} onSearch={this.handleFilt} onReset={this.handleReset} />
+        </Card>
 
         <Card title={i18n('project.platform_projects')} bordered={false} extra={extraContent}>
           {(hasPerm('proj.admin_addproj') || hasPerm('proj.user_addproj')) &&
@@ -443,6 +445,7 @@ class ProjectList extends React.Component {
               pageSizeOptions={PAGE_SIZE_OPTIONS}
             />
           </div>
+
         </Card>
 
         {/* <AuditProjectModal
