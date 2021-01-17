@@ -197,7 +197,8 @@ class ProjectList extends React.Component {
 
   componentDidMount() {
     this.props.dispatch({ type: 'app/getSourceList', payload: ['projstatus'] });
-    this.getProject()
+    this.props.dispatch({ type: 'app/getSourceList', payload: ['transactionStatus'] });
+    this.getProject();
   }
 
   // componentWillReceiveProps(nextProps) {
@@ -386,10 +387,10 @@ class ProjectList extends React.Component {
       }
     });
     const extraContent = (
-      <div>
-        <RadioGroup defaultValue="all">
+      <div style={{ display: 'flex', alignItems: 'center' }}>
+        <RadioGroup defaultValue="all" style={{ flex: 1 }}>
           <RadioButton value="all">全部</RadioButton>
-          {this.props.projectStatus.map(m => <RadioButton key={m.id} value={m.id}>{m.name}</RadioButton>)}
+          {this.props.transactionStatus.map(m => <RadioButton style={{ marginBottom: 6 }} key={m.id} value={m.id}>{m.name}</RadioButton>)}
         </RadioGroup>
         <Search
           style={{ width: 200, marginLeft: 16 }}
@@ -471,9 +472,9 @@ class ProjectList extends React.Component {
 }
 
 function mapStateToProps(state) {
-  const { country, projstatus } = state.app;
+  const { country, projstatus, transactionStatus } = state.app;
   const { page: userPageSize } = state.currentUser;
-  return { country, userPageSize, projectStatus: projstatus };
+  return { country, userPageSize, projectStatus: projstatus, transactionStatus };
 }
 
 
